@@ -1,0 +1,84 @@
+{
+	"plugins": [
+		"@typescript-eslint/eslint-plugin",
+		"eslint-plugin-tsdoc"
+	],
+	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended",
+		"prettier"
+	],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"project": "./tsconfig.json",
+		"ecmaVersion": 2021,
+		"sourceType": "module"
+	},
+	"rules": {
+		"@typescript-eslint/array-type": [
+			"error",
+			{
+				"default": "array"
+			}
+		],
+		"@typescript-eslint/consistent-indexed-object-style": [
+			"error",
+			"record"
+		],
+		"@typescript-eslint/consistent-type-assertions": [
+			"error",
+			{
+				"assertionStyle": "as",
+				"objectLiteralTypeAssertions": "allow"
+			}
+		],
+		"@typescript-eslint/consistent-type-definitions": [
+			"warn",
+			"interface"
+		],
+		"@typescript-eslint/consistent-type-imports": [
+			"error",
+			{
+				"prefer": "type-imports"
+			}
+		],
+		"@typescript-eslint/explicit-function-return-type": "warn",
+		"@typescript-eslint/member-delimiter-style": "error",
+		"@typescript-eslint/method-signature-style": [
+			"error",
+			"property"
+		],
+		"@typescript-eslint/no-unnecessary-type-constraint": "error",
+		"@typescript-eslint/type-annotation-spacing": "error",
+		"@typescript-eslint/unified-signatures": "warn",
+		"@typescript-eslint/naming-convention": [
+			"error",
+			{
+				"selector": [
+					"enum",
+					"enumMember",
+					"interface",
+					"typeAlias",
+					"typeParameter"
+				],
+				"format": [
+					"PascalCase"
+				],
+				"leadingUnderscore": "forbid",
+				"trailingUnderscore": "forbid"
+			}
+		],
+		"tsdoc/syntax": "warn",
+		"max-len": [
+			"error",
+			{
+				"code": 120,
+				"tabWidth": 4,
+				"comments": 100,
+				"ignoreComments": false,
+				"ignoreUrls": true
+			}
+		],
+		"no-trailing-spaces": "error"
+	}
+}
