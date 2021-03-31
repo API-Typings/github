@@ -947,6 +947,27 @@ export interface RepositoryOwner extends Actor, Node {
 }
 
 /**
+ * Represents a type that can be required by a pull request for merging.
+ */
+export interface RequirableByPullRequest {
+	/**
+	 * Whether this is required to pass before merging for a specific pull request.
+	 */
+	isRequired: boolean &
+		((
+			/**
+			 * The ID of the pull request this is required for.
+			 */
+			pullRequestId: string | number,
+
+			/**
+			 * The number of the pull request this is required for.
+			 */
+			pullRequestNumber: number
+		) => boolean);
+}
+
+/**
  * Entities that can be sponsored through GitHub Sponsors.
  */
 export interface Sponsorable {

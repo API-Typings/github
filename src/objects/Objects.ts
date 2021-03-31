@@ -137,6 +137,7 @@ import type {
 	RepositoryTopicConnection,
 	RepositoryVulnerabilityAlertConnection,
 	RequestedReviewer,
+	RequirableByPullRequest,
 	ReviewDismissalAllowanceActor,
 	ReviewDismissalAllowanceConnection,
 	ReviewRequestConnection,
@@ -625,7 +626,7 @@ export interface CheckAnnotationSpan extends MetaField<'CheckAnnotationSpan'> {
 /**
  * A check run.
  */
-export interface CheckRun extends Node, UniformResourceLocatable, MetaField<'CheckRun'> {
+export interface CheckRun extends Node, RequirableByPullRequest, UniformResourceLocatable, MetaField<'CheckRun'> {
 	/**
 	 * The check run's annotations.
 	 */
@@ -807,7 +808,9 @@ export interface Commit extends GitObject, Node, Subscribable, UniformResourceLo
 	additions: number;
 
 	/**
-	 * The pull requests associated with a commit.
+	 * The merged Pull Request that introduced the commit to the repository. If the commit is not
+	 * present in the default branch, additionally returns open Pull Requests associated with the
+	 * commit.
 	 */
 	associatedPullRequests?: Nullable<PullRequestConnection>;
 
@@ -2133,7 +2136,7 @@ export interface EnterpriseOwnerInfo extends MetaField<'EnterpriseOwnerInfo'> {
  */
 export interface EnterpriseRepositoryInfo extends Node, MetaField<'EnterpriseRepositoryInfo'> {
 	/**
-	 * Identifies if the repository is private.
+	 * Identifies if the repository is private or internal.
 	 */
 	isPrivate: boolean;
 
@@ -4500,6 +4503,16 @@ export interface PullRequest
 	viewerCanEnableAutoMerge: boolean;
 
 	/**
+	 * The latest review given from the viewer.
+	 */
+	viewerLatestReview?: Nullable<PullRequestReview>;
+
+	/**
+	 * The person who has requested the viewer for review on this pull request.
+	 */
+	viewerLatestReviewRequest?: Nullable<ReviewRequest>;
+
+	/**
 	 * The merge body text for the viewer and method.
 	 */
 	viewerMergeBodyText: string;
@@ -5001,7 +5014,7 @@ export interface Ref extends Node, MetaField<'Ref'> {
 }
 
 /**
- * A ref update rules for a viewer.
+ * A ref update rule for a viewer.
  */
 export interface RefUpdateRule extends MetaField<'RefUpdateRule'> {
 	/**
@@ -5031,6 +5044,11 @@ export interface RefUpdateRule extends MetaField<'RefUpdateRule'> {
 	requiredStatusCheckContexts?: Nullable<Nullable<string>[]>;
 
 	/**
+	 * Are reviews from code owners required to update matching branches.
+	 */
+	requiresCodeOwnerReviews: boolean;
+
+	/**
 	 * Are merge commits prohibited from being pushed to this branch.
 	 */
 	requiresLinearHistory: boolean;
@@ -5039,6 +5057,11 @@ export interface RefUpdateRule extends MetaField<'RefUpdateRule'> {
 	 * Are commits required to be signed.
 	 */
 	requiresSignatures: boolean;
+
+	/**
+	 * Is the viewer allowed to dismiss reviews.
+	 */
+	viewerAllowedToDismissReviews: boolean;
 
 	/**
 	 * Can the viewer push to the branch.
@@ -5725,6 +5748,11 @@ export interface Sponsorship extends Node, MetaField<'Sponsorship'> {
 	createdAt: string;
 
 	/**
+	 * Whether this sponsorship represents a one-time payment versus a recurring sponsorship.
+	 */
+	isOneTimePayment: boolean;
+
+	/**
 	 * The privacy level for this sponsorship.
 	 */
 	privacyLevel: SponsorshipPrivacy;
@@ -6087,6 +6115,13 @@ export interface SponsorsTier extends Node, MetaField<'SponsorsTier'> {
 	adminInfo?: Nullable<SponsorsTierAdminInfo>;
 
 	/**
+	 * Get a different tier for this tier's maintainer that is at the same frequency as this tier
+	 * but with a lesser cost. Returns the published tier with the monthly price closest to this
+	 * tier's without going over.
+	 */
+	closestLesserValueTier?: Nullable<SponsorsTier>;
+
+	/**
 	 * Identifies the date and time when the object was created.
 	 */
 	createdAt: string;
@@ -6100,6 +6135,17 @@ export interface SponsorsTier extends Node, MetaField<'SponsorsTier'> {
 	 * The tier description rendered to HTML.
 	 */
 	descriptionHTML: string;
+
+	/**
+	 * Whether this tier was chosen at checkout time by the sponsor rather than defined ahead of
+	 * time by the maintainer who manages the Sponsors listing.
+	 */
+	isCustomAmount: boolean;
+
+	/**
+	 * Whether this tier is only for use with one-time sponsorships.
+	 */
+	isOneTime: boolean;
 
 	/**
 	 * How much this tier costs per month in cents.
@@ -6150,7 +6196,7 @@ export interface StatusCheckRollup extends Node, MetaField<'StatusCheckRollup'> 
 /**
  * Represents an individual commit status context.
  */
-export interface StatusContext extends Node, MetaField<'StatusContext'> {
+export interface StatusContext extends Node, RequirableByPullRequest, MetaField<'StatusContext'> {
 	/**
 	 * The avatar of the OAuth application or the user that created the status.
 	 */
