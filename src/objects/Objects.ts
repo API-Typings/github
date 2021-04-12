@@ -5771,6 +5771,11 @@ export interface Sponsorship extends Node, MetaField<'Sponsorship'> {
 	 * The associated sponsorship tier.
 	 */
 	tier?: Nullable<SponsorsTier>;
+
+	/**
+	 * Identifies the date and time when the current tier was chosen for this sponsorship.
+	 */
+	tierSelectedAt?: Nullable<string>;
 }
 
 /**
