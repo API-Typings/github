@@ -1,0 +1,1 @@
+export type Gists = void;
