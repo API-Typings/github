@@ -1,0 +1,54 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: "@types/node"
+    versions:
+    - 14.14.37
+    - 14.14.39
+    - 14.14.41
+    - 15.0.0
+  - dependency-name: extended-utility-types
+    versions:
+    - 1.10.1
+    - 1.12.0
+    - 1.13.0
+    - 1.15.0
+    - 1.8.1
+    - 1.9.0
+  - dependency-name: eslint-config-prettier
+    versions:
+    - 8.2.0
+  - dependency-name: typescript
+    versions:
+    - 4.2.4
+  - dependency-name: "@typescript-eslint/parser"
+    versions:
+    - 4.19.0
+    - 4.20.0
+    - 4.21.0
+  - dependency-name: "@typescript-eslint/eslint-plugin"
+    versions:
+    - 4.19.0
+    - 4.20.0
+    - 4.21.0
+  - dependency-name: tslib
+    versions:
+    - 2.2.0
+  - dependency-name: "@commitlint/cli"
+    versions:
+    - 12.1.1
+  - dependency-name: "@commitlint/config-conventional"
+    versions:
+    - 12.1.1
+  - dependency-name: husky
+    versions:
+    - 5.2.0
+    - 6.0.0
+  - dependency-name: eslint
+    versions:
+    - 7.23.0
